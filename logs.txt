@@ -1,2 +1,3 @@
-APRIL 09, 2026 | Everld Gateway | Added frost biomes, Fixed portal lag, Updated deity lore
-APRIL 08, 2026 | System Core | Optimized Lua scripts, Integrated GitHub Actions, modified successfuly
+February 26, 2026 | The Grind Start | After looking at the map I gathered some points of interest among the server by exploring it as much as possible, Removed some mods from server which are not upto date, Updated the mods which i think to add in the next season
+MARCH 1, 2026 | Bases | Optimized couple of mods in the alst week or so, Added fixes to guilds and land claiming system, still not confirm whether i should add these in season 2, Planning to do a poll before initial release
+
