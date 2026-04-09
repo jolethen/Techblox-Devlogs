@@ -1,70 +1,47 @@
-/**
- * TECHBLOX DEVLOG DATA
- * Add new logs at the top of the array to appear first.
- */
-const logs = [
-    {
-        date: "APRIL 09, 2026",
-        title: "Everld Gateway Logic",
-        tasks: [
-            "Optimized Luanti server-side entity handling for Everld mobs",
-            "Updated the Frozen Deity sign communication system",
-            "Refined the 'Door of Everld' teleportation delay to reduce lag"
-        ]
-    },
-    {
-        date: "APRIL 08, 2026",
-        title: "Lore System Architecture",
-        tasks: [
-            "Drafted the 12-month lore roadmap",
-            "Finalized the 'Fake Gods' reveal timeline for Jan 2027",
-            "Integrated GitHub Actions for the World Records leaderboard"
-        ]
-    },
-    {
-        date: "APRIL 07, 2026",
-        title: "Interface & Aesthetics",
-        tasks: [
-            "Designed premium dark-mode UI for devlog site",
-            "Added CSS keyframe animations for terminal-style entrance",
-            "Implemented mobile-responsive media queries"
-        ]
-    }
-];
-
-/**
- * CORE RENDERING LOGIC
- */
-function renderLogs() {
+async function loadLogs() {
     const container = document.getElementById('log-container');
     
-    // Clear container (in case of re-renders)
-    container.innerHTML = '';
+    try {
+        // Fetch the text file
+        const response = await fetch('logs.txt');
+        const data = await response.text();
+        
+        // Split text into lines and filter out empty ones
+        const lines = data.split('\n').filter(line => line.trim() !== '');
 
-    logs.forEach((log, index) => {
-        // Create the article element
-        const entry = document.createElement('article');
-        entry.className = 'log-entry';
-        
-        // Add staggered animation delay
-        entry.style.animationDelay = `${index * 0.15}s`;
-        
-        // Map tasks to list items
-        const tasksHtml = log.tasks.map(t => `<li>${t}</li>`).join('');
-        
-        // Build the HTML structure
-        entry.innerHTML = `
-            <div class="entry-header">
-                <span class="date">[TIMESTAMP: ${log.date}]</span>
-                <span class="sub-routine-count">${log.tasks.length} SUB-ROUTINES</span>
-            </div>
-            <h2>${log.title}</h2>
-            <ul>${tasksHtml}</ul>
-        `;
-        
-        container.appendChild(entry);
-    });
+        lines.forEach((line, index) => {
+            // Split line by the pipe symbol "|"
+            const [date, title, tasksString] = line.split('|');
+            
+            if (!date || !title) return; // Skip malformed lines
+
+            // Convert comma-separated tasks into an array
+            const tasks = tasksString.split(',').map(t => t.trim());
+
+            const entry = document.createElement('article');
+            entry.className = 'log-entry';
+            entry.style.animationDelay = `${index * 0.15}s`;
+
+            const tasksHtml = tasks.map(t => `<li>${t}</li>`).join('');
+
+            entry.innerHTML = `
+                <div class="entry-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="date">[TIMESTAMP: ${date.trim()}]</span>
+                    <span style="font-size: 0.7rem; color: var(--muted); opacity: 0.6;">
+                        ${tasks.length} SUB-ROUTINES
+                    </span>
+                </div>
+                <h2>${title.trim()}</h2>
+                <ul>${tasksHtml}</ul>
+            `;
+
+            container.appendChild(entry);
+        });
+
+    } catch (error) {
+        console.error("Error loading logs:", error);
+        container.innerHTML = `<p style="color:red;">Error loading transmission from Everld...</p>`;
+    }
 }
 
-// Run the script when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', renderLogs);
+document.addEventListener('DOMContentLoaded', loadLogs);
