@@ -1,3 +1,2 @@
-APRIL 10, 2026 | Everld Expansion | Added frost biomes, Optimized mob AI, Fixed portal lag
-APRIL 09, 2026 | Database Migration | Backup of player stats, Switched to local JSON storage
-APRIL 08, 2026 | Lore Update | Added Frozen Deity signs, Updated Everld Idkkkkkkk
+APRIL 09, 2026 | Everld Gateway | Added frost biomes, Fixed portal lag, Updated deity lore
+APRIL 08, 2026 | System Core | Optimized Lua scripts, Integrated GitHub Actions, modified successfuly
