@@ -1,18 +1,17 @@
 /**
  * TECHBLOX DYNAMIC LOG PARSER
  * This script fetches logs.txt and builds the UI.
- * Dev Note- Built on 9 Apr also added the workflow and stuff so that whenever i or any maintainer runs it, it'll update the git pages website
+ * Dev Note- Built on 9 Apr
  */
 
 async function initDevLog() {
     const container = document.getElementById('log-container');
     
     try {
-        // 1. Fetch the raw text file
-        const response = await fetch('logs.txt');
+        // 1. Fetch the raw text file (Added timestamp to prevent old caching)
+        const response = await fetch('logs.txt?v=' + new Date().getTime());
         
         if (!response.ok) {
-            // Generic error message if file is missing
             throw new Error("System Link Failure: logs.txt not found.");
         }
 
@@ -26,18 +25,20 @@ async function initDevLog() {
             return;
         }
 
-        // 3. Clear container and render each line
         container.innerHTML = ''; 
 
         lines.forEach((line, index) => {
-            // Split by the Pipe symbol: Date | Title | Tasks
             const parts = line.split('|');
             
-            if (parts.length < 3) return; 
+            // Flex-check: Works with 2 parts (Date | Title) or 3 parts (Date | Title | Tasks)
+            if (parts.length < 2) return; 
 
             const logDate = parts[0].trim();
             const logTitle = parts[1].trim();
-            const taskList = parts[2].split(',').map(t => t.trim());
+            
+            // If there's no 3rd part (tasks), we'll just show the title as a task
+            const rawTasks = parts[2] ? parts[2] : "Update logged.";
+            const taskList = rawTasks.split(',').map(t => t.trim());
 
             const entry = document.createElement('article');
             entry.className = 'log-entry';
@@ -62,11 +63,10 @@ async function initDevLog() {
         container.innerHTML = `
             <div style="text-align:center; padding: 40px; border: 1px dashed #60a5fa; color: #60a5fa;">
                 <p><strong>CONNECTION ERROR</strong></p>
-                <p style="font-size:0.8rem; opacity:0.7;">Unable to retrieve devlog data. Check file status.</p>
+                <p style="font-size:0.8rem; opacity:0.7;">Unable to retrieve devlog data.</p>
             </div>
         `;
     }
 }
 
-// Fire the logic when the window loads
 window.addEventListener('DOMContentLoaded', initDevLog);
